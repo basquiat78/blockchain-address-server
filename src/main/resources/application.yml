@@ -1,0 +1,106 @@
+#spring  setup and common configuration
+spring:
+  profiles:
+    active: local
+    
+#Redis pub/sub channel
+# pub채널은 웹소켓에서 생성된 주소를 프론트 엔드로 넘길 수 있도록 하기 위한 채널이다.
+# sub채널은 api server가 redis로 해당 채널로 주소를 생성하도록 하기 위한 채널이다.
+# 해당 채널명은 변경하면 된다.
+subscribe:
+  channel: 'create-address'
+
+publish:
+  channel: 'propagate-address'
+
+#mybatis setup
+mybatis:
+  mapper-locations: classpath*:mappers/**/*.xml
+  configuration:
+    call-setters-on-nulls: true
+  
+#company mark up
+company:
+  host:
+    name: 'https://github.com/basquiat78'
+    
+#schedule pool size
+schedule:
+  pool:
+    size: 100
+
+#based.type.btc
+based:
+  type:
+    btc: BTC,QTUM
+    eth: ETH,ETC
+
+#default account name
+account:
+  name: basquiat
+
+---
+#spring profiles : LOCAL
+
+#spring and hikari setup
+spring:
+  profiles: local
+  datasource:
+    hikari:
+      cachePrepStmts: true
+      connectionTestQuery: SELECT 1
+      maximumPoolSize: 4
+      minimumIdle: 7
+      prepStmtCacheSize: 250 
+      prepStmtCacheSqlLimit: 2048 
+      pool-name: address-server
+    url: jdbc:mysql://127.0.0.1:3306/basquiat?autoReconnect=true
+    username: root
+    password: basquiat
+    dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
+    type: com.zaxxer.hikari.HikariDataSource
+  session: 
+    store-type: REDIS
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 
+    
+#logging
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        web: DEBUG
+    com:
+      zaxxer:
+        hikari: DEBUG
+        
+#bitcoin node setup
+bitcoin:
+  host: <<your bitcoin node ip>>
+  port: <<your bitcoin node port, bitcoin default port is 18332>>
+  user: <<your bitcoin user id>>
+  password: <<your bitcoin user password>>
+ 
+#qtum node setup
+qtum:
+  host: <<your qtum node ip>>
+  port: <<your qtum node port, qtum default port is 18332>>
+  user: <<your qtum user id>>
+  password: <<your qtum user password>>
+
+#ethereumclassic node setup
+etc:
+  host: <<your etc node ip>>
+  port: <<your etc node port, etc default port is 8545>>
+  user: ''
+  password: <<your etc user password>>
+  
+#ethereum node setup
+eth:
+  host: <<your eth node ip>>
+  port: <<your eth node port, eth default port is 8545>>
+  user: ''
+  password: ''

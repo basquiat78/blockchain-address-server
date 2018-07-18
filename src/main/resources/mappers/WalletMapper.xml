@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.basquiat.address.service.wallet.mapper.WalletMapper">
+	
+    <resultMap id="walletMap" type="com.basquiat.address.service.wallet.vo.WalletVO">
+        <result property="userId" 			column="userId" />
+        <result property="coinType" 		column="coin_type" />
+        <result property="address" 			column="address" />
+        <result property="balance" 			column="balance" />
+        <result property="destinationTag"	column="destinationTag" />
+        <result property="createdDttm" 		column="createdDttm" />
+    </resultMap>
+
+	<insert id="createNextSequence">
+		INSERT INTO SEQUENCE_GENERATOR VALUES (0)
+	</insert>
+
+	<select id="selectWallet" parameterType="com.basquiat.address.service.wallet.vo.WalletVO" resultMap="walletMap">
+		SELECT
+			user_id 		AS userId,
+			coin_type 		AS coinType,
+			address 		AS address,
+			destination_tag	AS destinationTag,
+			DATE_FORMAT(createdttm, 'yyyy-mm-dd"t"hh24:mi:ss"z"') AS createdDttm
+		FROM WALLET
+		WHERE
+			user_id = #{userId} AND coin_type = #{coinType}
+	</select>
+	
+	<select id="selectWalletByAddress" parameterType="string" resultMap="walletMap">
+		SELECT
+			user_id 		AS userId,
+			coin_type 		AS coinType,
+			address 		AS address,
+			balance 		AS balance,
+			destination_tag	AS destinationTag,
+			DATE_FORMAT(createdttm, 'yyyy-mm-dd"t"hh24:mi:ss"z"') AS createdDttm
+		FROM WALLET
+		WHERE
+			address = #{address}
+	</select>
+	
+	<select id="selectTagSequence" resultType="java.lang.Integer">
+		SELECT LAST_INSERT_ID()
+	</select>
+	
+ 	<update id="initializeWallet" parameterType="com.basquiat.address.service.wallet.vo.WalletVO">
+		INSERT INTO WALLET
+			( 
+	 		user_id, 
+	 		coin_type, 
+	 		address, 
+	 		destination_tag, 
+	 		createdttm 
+	 		)
+        VALUES 	
+        	( 
+        	#{userId}, 
+        	#{coinType}, 
+        	#{address}, 
+        	#{destinationTag}, 
+        	now() 
+        	)
+        ON DUPLICATE KEY UPDATE
+        	user_id = #{userId}, 
+        	coin_type = #{coinType}
+	</update>
+	
+ 	<update id="updateWalletByAddress" parameterType="com.basquiat.address.service.wallet.vo.WalletVO">
+ 		UPDATE WALLET
+ 			SET balance = #{balance}
+		WHERE address = #{address}
+	</update>
+	
+</mapper>
