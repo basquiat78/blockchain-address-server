@@ -20,7 +20,7 @@ public class RedisPubServiceTest {
 	
 	@Before
     public void setUp() {
-		message = "{'userId':10, 'coinId': 2, 'coinCode': 'BTC'}";
+		message = "{'userId':10, 'coinType': 'BTC'}";
     }
 	
 	@Test
