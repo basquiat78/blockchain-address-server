@@ -1,6 +1,7 @@
 package com.basquiat.address.scheule;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -86,7 +87,7 @@ public class TransactionHandler {
 			}
 			
 			// 9. 최종적으로 모든 txId별로 조회 및 엡데이트가 완료가 된다면 마지막 블록 정보를 BLOCK_HISTORY 테이블에 업데이트를 한다.
-			Integer lastBlockFromBlockChain = (Integer) txIdsMap.get("lastBlock");
+			BigInteger lastBlockFromBlockChain = (BigInteger) txIdsMap.get("lastBlock");
 			LOG.info("lastBlock : "+ txIdsMap.get("lastBlock"));
 			blockHistoryVO.setLastBlockNumber(lastBlockFromBlockChain);
 			blockHistoryService.updateBlockHistory(blockHistoryVO);

@@ -1,5 +1,7 @@
 package com.basquiat.address.service.block.vo;
 
+import java.math.BigInteger;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,5 +22,5 @@ public class BlockHistoryVO {
 	/**
 	 * 마지막으로 확인한 블록 넘버
 	 */
-	private Integer lastBlockNumber;
+	private BigInteger lastBlockNumber;
 }

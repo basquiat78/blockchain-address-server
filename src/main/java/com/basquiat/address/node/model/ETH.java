@@ -1,5 +1,6 @@
 package com.basquiat.address.node.model;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -69,13 +70,13 @@ public class ETH implements BlockChainNodeInterface {
 	}
 
 	@Override
-	public Integer getBlockCount() throws Exception {
+	public BigInteger getBlockCount() throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getBlockHash(Integer blockNumber) throws Exception {
+	public String getBlockHash(BigInteger blockNumber) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -93,7 +94,7 @@ public class ETH implements BlockChainNodeInterface {
 	}
 
 	@Override
-	public Map<String, Object> schedulingTransactionCheck(Integer lastBlock) throws Exception {
+	public Map<String, Object> schedulingTransactionCheck(BigInteger lastBlock) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

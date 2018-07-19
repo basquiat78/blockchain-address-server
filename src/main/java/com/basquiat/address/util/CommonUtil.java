@@ -1,6 +1,7 @@
 package com.basquiat.address.util;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -163,6 +164,15 @@ public class CommonUtil {
 	 */
 	public static String makeUrlTypeOfEth(String host, String port) {
 		return "http://"+host+ ":"+ port;
+	}
+	
+	/**
+	 * eth계열의 경우 Integer타입의 값들은 16진수 hex값으로 BigInteger로 변환해야한다.
+	 * @param quantity
+	 * @return
+	 */
+	public static BigInteger decodeQuantityTypeOfETH(String quantity) {
+		return new BigInteger(quantity.substring(2), 16);
 	}
 	
 	/**

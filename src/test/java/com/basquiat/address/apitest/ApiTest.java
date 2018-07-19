@@ -1,6 +1,7 @@
 package com.basquiat.address.apitest;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,12 +32,10 @@ public class ApiTest {
 	
 	@Before
     public void setUp() {
-		
 		coinType = "BTC";
-		
 		blockHistoryVO = new BlockHistoryVO();
 		blockHistoryVO.setCoinType(coinType);
-		blockHistoryVO.setLastBlockNumber(1353056);
+		blockHistoryVO.setLastBlockNumber(BigInteger.valueOf(1353056));
     }
 	
 	@Test

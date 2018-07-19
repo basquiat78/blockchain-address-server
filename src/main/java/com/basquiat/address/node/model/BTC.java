@@ -1,5 +1,6 @@
 package com.basquiat.address.node.model;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,16 +78,16 @@ public class BTC implements BlockChainNodeInterface {
 	 * 최신 블록 넘버 가져오기
 	 */
 	@Override
-	public Integer getBlockCount() throws Exception {
+	public BigInteger getBlockCount() throws Exception {
 		JsonElement jsonElement = (JsonElement) RPCCall(RPCCommandCode.BTC_GETBLOCKCOUNT.CODE, new ArrayList<>());
-		return jsonElement.getAsInt();
+		return jsonElement.getAsBigInteger();
 	}
 
 	/**
 	 * 블록넘버로 블록 해쉬 가져오기
 	 */
 	@Override
-	public String getBlockHash(Integer blockNumber) throws Exception {
+	public String getBlockHash(BigInteger blockNumber) throws Exception {
 		List<Object> list = new ArrayList<>();
 		list.add(blockNumber);
 		JsonElement jsonElement = (JsonElement)RPCCall(RPCCommandCode.BTC_GETBLOCKHASH.CODE, list);
@@ -115,19 +116,23 @@ public class BTC implements BlockChainNodeInterface {
 		return (JsonObject)RPCCall(RPCCommandCode.BTC_GETRAWTRANSACTION.CODE, list);
 	}
 	
+	/**
+	 * schedule check
+	 * txId의 리스트와 최신 블록 넘버를 맵객체로 넘긴다.
+	 */
 	@Override
-	public Map<String, Object> schedulingTransactionCheck(Integer lastBlock) throws Exception {
+	public Map<String, Object> schedulingTransactionCheck(BigInteger lastBlock) throws Exception {
 		
 		// 1. 최신 블록을 가져온다.
-		Integer latestBlock = this.getBlockCount();
+		BigInteger latestBlock = this.getBlockCount();
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		
 		// 2. 최신 블록이 lastBlock보다 크다면
-		if(latestBlock > lastBlock) {
+		if(latestBlock.compareTo(lastBlock) >  0 ) {
 			List<String> list = new ArrayList<>();
 			// 3. lastBlock + 1에 해당하는 블록부터 최신 블록까지 blockhash를 가져오고
-			for(int i = lastBlock+1; i < latestBlock+1; i++) {
+			for(BigInteger i = lastBlock.add(BigInteger.ONE); i.compareTo(latestBlock.add(BigInteger.ONE)) < 0; i = i.add(BigInteger.ONE)) {
 				// 4. blockNumber로 blockHash로 해당 블록 정보를 가져와서
 				String blockHash = this.getBlockHash(i);
 				JsonObject blockInfo = this.getBlock(blockHash);

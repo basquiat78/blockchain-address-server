@@ -1,5 +1,6 @@
 package com.basquiat.address.cointest;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.junit.Before;
@@ -50,7 +51,7 @@ public class QTUMRPCCallTest {
 	//@Test
 	public void getBlockHashTest() throws Exception {
 		BlockChainNodeInterface node = CommonUtil.createInstance(preFix, coinType.toUpperCase());
-		System.out.println(node.getBlockHash(177844));
+		System.out.println(node.getBlockHash(BigInteger.valueOf(177844)));
 	}
 	
 	//@Test
