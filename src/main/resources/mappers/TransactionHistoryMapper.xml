@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.basquiat.address.service.transaction.mapper.TransactionHistoryMapper">
+	
+    <resultMap id="transactionHistoryMap" type="com.basquiat.address.service.transaction.vo.TransactionVO">
+        <result property="txId" 			column="tx_id"/>
+        <result property="blockHash"		column="block_hash"/>
+        <result property="coinType"			column="coin_type"/>
+        <result property="address"			column="address"/>
+        <result property="balance"			column="balance"/>
+        <result property="confirmations"	column="confirmations"/>
+        <result property="updateDttm"		column="updateDttm"/>
+    </resultMap>
+
+	<insert id="insertTransactionHistory" parameterType="com.basquiat.address.service.transaction.vo.TransactionVO">
+		INSERT INTO TRANSACTION_HISTORY
+				( 
+				tx_id,
+				block_hash, 
+				coin_type,
+				address, 
+				balance, 
+				confirmations, 
+				update_time
+				) 
+				VALUES 
+				( 
+				#{txId},
+				#{blockHash},
+				#{coinType},
+				#{address},
+				#{balance},
+				#{confirmations},
+				now() 
+				)
+	</insert>
+ 	
+ 	<update id="updateTransactionHistory" parameterType="com.basquiat.address.service.transaction.vo.TransactionVO">
+ 		UPDATE TRANSACTION_HISTORY
+ 			SET confirmations = #{confirmations}
+		WHERE 1=1
+		<if test="blockHash != null and blockHash != ''">
+			AND block_hash = #{blockHash}
+		</if>
+		<if test="txId != null and txId != ''">
+			AND tx_Id = #{txId}		
+		</if>
+	</update>
+
+	<select id="selectTransactionHistoryById" parameterType="string" resultMap="transactionHistoryMap">
+		SELECT
+			tx_id,
+			block_hash, 
+			coin_type,
+			address, 
+			balance, 
+			confirmations, 
+			DATE_FORMAT(update_time, 'yyyy-mm-dd"t"hh24:mi:ss"z"') AS updateDttm
+		FROM TRANSACTION_HISTORY
+			WHERE tx_Id = #{txId}
+	</select>
+	
+	<select id="selectTransactionHistoryByConfirmations" parameterType="int" resultMap="transactionHistoryMap">
+		SELECT
+			tx_id,
+			block_hash, 
+			coin_type,
+			address, 
+			balance, 
+			confirmations, 
+			DATE_FORMAT(update_time, 'yyyy-mm-dd"t"hh24:mi:ss"z"') AS updateDttm
+		FROM TRANSACTION_HISTORY
+		<![CDATA[ 
+			WHERE confirmations < #{confirmations}
+		]]>
+	</select>
+	
+	<select id="selectTransactionHistoryByBlockHash" parameterType="string" resultMap="transactionHistoryMap">
+		SELECT
+			tx_id,
+			block_hash, 
+			coin_type,
+			address, 
+			balance, 
+			confirmations, 
+			DATE_FORMAT(update_time, 'yyyy-mm-dd"t"hh24:mi:ss"z"') AS updateDttm
+		FROM TRANSACTION_HISTORY
+			WHERE block_hash = #{blockHash}
+	</select>
+	
+</mapper>

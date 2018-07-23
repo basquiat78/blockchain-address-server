@@ -147,6 +147,17 @@ public class CommonUtil {
 	public static BigDecimal getValueFromVOut(JsonObject jsonObject) throws Exception {
 		return jsonObject.get("value").getAsBigDecimal();
 	}
+
+	/**
+	 * block내의 block time은 unix time으로 변환하는 과정이 필요하다.
+	 * @param blockTime
+	 * @return String
+	 * @throws Exception
+	 */
+	public static String convertUnixTimeToString(Integer blockTime) throws Exception {
+		long unixTime = Long.parseLong(blockTime.toString()) * 1000;
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(unixTime));
+	}
 	
 	/**
 	 * block chain node connect url
@@ -175,17 +186,6 @@ public class CommonUtil {
 	 */
 	public static BigInteger decodeQuantityTypeOfETH(String quantity) {
 		return new BigInteger(quantity.substring(2), 16);
-	}
-	
-	/**
-	 * block내의 block time은 unix time으로 변환하는 과정이 필요하다.
-	 * @param blockTime
-	 * @return String
-	 * @throws Exception
-	 */
-	public static String convertUnixTimeToString(Integer blockTime) throws Exception {
-		long unixTime = Long.parseLong(blockTime.toString()) * 1000;
-		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(unixTime));
 	}
 	
 	/**
