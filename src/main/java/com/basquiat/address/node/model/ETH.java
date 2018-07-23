@@ -20,7 +20,6 @@ import com.google.gson.JsonObject;
  *
  */
 @Service("eth")
-
 public class ETH implements BlockChainNodeInterface {
 
 	public static String host;
