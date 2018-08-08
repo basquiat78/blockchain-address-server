@@ -56,6 +56,8 @@ public class WalletService {
 	public void createWallet() {
 
 		// queue에서 생성할 정보를 가져온다.
+		// queue에서 정보를 가져오는 이유는 클러스터 환경에서 subscribe한 모든 consumer들은 같은 로직을 태울 수밖에 없다.
+		// queue에서 pop을 하게 되면 먼저 가져간 consumer에 의해 한해서 로직이 구현된다.
 		String requestCreateWalletInfo = listQueueOperations.leftPop(REDIS_QUEUE_KEY);
 		if(requestCreateWalletInfo != null ) {
 			try {
