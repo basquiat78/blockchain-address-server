@@ -2,7 +2,9 @@
 
 이 프로젝트는 redis의 pub/sub을 이용한 프로젝트이다.
 
-pub/sub을 지원하는 많은 application, 예를 들면 kafka같은 것도 있을 수 있겠지만 가벼우면서도 빠르게 사용할 수 있는 redis를 선택했고 queue, stack 메세지를 구현하는것도 상당히 쉽다.
+pub/sub을 지원하는 많은 application, 예를 들면 kafka, rabbitmq같은 것도 있을 수 있겠지만 가벼우면서도 빠르게 사용할 수 있는 redis를 선택했고 queue, stack 메세지를 구현하는것도 상당히 쉽다.
+
+물론 kafka의 장점은 많지만 가벼운 시스템을 구축하기 위해 zookeeper를 선행으로 설치해야한다는 것도 불편해서 redis를 선택했다.
 
 MSA를 구성할 때 각 서비스들을 Eureka와 Feign Client를 활용해 각 각의 서비스들을 호출할 수 있게 구성할 수 있다.    
 
