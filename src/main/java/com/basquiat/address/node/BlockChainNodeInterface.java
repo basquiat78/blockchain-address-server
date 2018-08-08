@@ -2,7 +2,6 @@ package com.basquiat.address.node;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gson.JsonObject;
 
@@ -27,8 +26,30 @@ public interface BlockChainNodeInterface {
 	
 	public JsonObject getBlock(String blockHash) throws Exception;
 	
+	/**
+	 * ethereum계열은 블럭 넘버로 block 정보를 가져올 수 있다.
+	 * @param blockNumber
+	 * @return JsonObject
+	 * @throws Exception
+	 */
+	public JsonObject getBlock(BigInteger blockNumber) throws Exception;
+	
 	public JsonObject getRawTransaction(String txId) throws Exception;
 
-	public Map<String, Object> schedulingTransactionCheck(BigInteger lastBlock) throws Exception;
+	/**
+	 * ETH 트랜잭션에 대한 수신 값 반환 
+	 * @param hash
+	 * @return JsonObject
+	 * @throws Exception
+	 */
+	public JsonObject getTransactionReceipt(String hash) throws Exception;
 	
+	/**
+	 * ETH 트랜잭션에 대한 confirmation check 
+	 * @param txId
+	 * @return int
+	 * @throws Exception
+	 */
+	public int confirmationCheckETH(String txId) throws Exception;
+
 }

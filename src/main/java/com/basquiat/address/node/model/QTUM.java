@@ -2,11 +2,8 @@ package com.basquiat.address.node.model;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +12,6 @@ import com.basquiat.address.node.BlockChainNodeInterface;
 import com.basquiat.address.util.CommonUtil;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 
 /**
  * 
@@ -26,21 +22,17 @@ import com.google.gson.reflect.TypeToken;
 @Service("qtum")
 public class QTUM implements BlockChainNodeInterface {
 
-	public static String host;
-		@Value("${qtum.host}")
-		public void setHost(String host) { QTUM.host = host; }
+	@Value("${qtum.host}")
+	private String host;
 	
-	public static String port;
-		@Value("${qtum.port}")
-		public void setPort(String port) { QTUM.port = port; }
+	@Value("${qtum.port}")
+	private String port;
 	
-	public static String user;
-		@Value("${qtum.user}")
-		public void setUser(String user) { QTUM.user = user; }
+	@Value("${qtum.user}")
+	private String user;
 	
-	public static String password;
-		@Value("${qtum.password}")
-		public void setPassword(String password) { QTUM.password = password; }
+	@Value("${qtum.password}")
+	private String password;
 	
 	/**
 	 * RPC Call
@@ -65,7 +57,7 @@ public class QTUM implements BlockChainNodeInterface {
 	@Override
 	public String getNewAddress() throws Exception {
 		List<Object> list = new ArrayList<>();
-		list.add("basquiat");
+		list.add("kdexusertmp");
 		JsonElement jsonElement = (JsonElement) RPCCall(RPCCommandCode.QTUM_CREATEADDRESS.CODE, list);
 		return jsonElement.getAsString();
 	}
@@ -79,9 +71,6 @@ public class QTUM implements BlockChainNodeInterface {
 		return jsonElement.getAsBigInteger();
 	}
 
-	/**
-	 * 블록 넘버로 블록 해쉬값을 구한다.
-	 */
 	@Override
 	public String getBlockHash(BigInteger blockNumber) throws Exception {
 		List<Object> list = new ArrayList<>();
@@ -90,9 +79,6 @@ public class QTUM implements BlockChainNodeInterface {
 		return jsonElement.getAsString();
 	}
 
-	/**
-	 * 블록 해쉬로 블록 정보를 얻는다.
-	 */
 	@Override
 	public JsonObject getBlock(String blockHash) throws Exception {
 		List<Object> list = new ArrayList<>();
@@ -101,8 +87,14 @@ public class QTUM implements BlockChainNodeInterface {
 	}
 
 	/**
-	 * 트랜잭션 아이디로 트랜잭션 정보를 얻는다.
+	 * btc계열은 사용하지 않는다.
 	 */
+	@Override
+	public JsonObject getBlock(BigInteger blockNumber) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	@Override
 	public JsonObject getRawTransaction(String txId) throws Exception {
 		List<Object> list = new ArrayList<>();
@@ -112,36 +104,21 @@ public class QTUM implements BlockChainNodeInterface {
 	}
 	
 	/**
-	 * schedule check
-	 * txId의 리스트와 최신 블록 넘버를 맵객체로 넘긴다.
+	 * ETH 계열에서 사용 
 	 */
 	@Override
-	public Map<String, Object> schedulingTransactionCheck(BigInteger lastBlock) throws Exception {
-		
-		// 1. 최신 블록을 가져온다.
-		BigInteger latestBlock = this.getBlockCount();
-		
-		Map<String, Object> resultMap = new HashMap<>();
-		
-		// 2. 최신 블록이 lastBlock보다 크다면
-		if(latestBlock.compareTo(lastBlock) >  0 ) {
-			List<String> list = new ArrayList<>();
-			// 3. lastBlock + 1에 해당하는 블록부터 최신 블록까지 blockhash를 가져오고
-			for(BigInteger i = lastBlock.add(BigInteger.ONE); i.compareTo(latestBlock.add(BigInteger.ONE)) < 0; i = i.add(BigInteger.ONE)) {
-				// 4. blockNumber로 blockHash로 해당 블록 정보를 가져와서
-				String blockHash = this.getBlockHash(i);
-				JsonObject blockInfo = this.getBlock(blockHash);
-				List<String> resultList = CommonUtil.convertTypeTokenFromGson(blockInfo.get("tx"), new TypeToken<List<String>>(){});
-				list = ListUtils.union(list, resultList);
-			}
-			
-			resultMap.put("txList", list);
-			resultMap.put("lastBlock", latestBlock);
-		} else {
-			resultMap = null;
-		}
-		
-		return resultMap;
+	public JsonObject getTransactionReceipt(String hash) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**
+	 * ETH 계열에서 사용 
+	 */
+	@Override
+	public int confirmationCheckETH(String txId) throws Exception {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }

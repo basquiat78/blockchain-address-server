@@ -39,6 +39,10 @@ based:
 account:
   name: basquiat
 
+#specific comfirmations size
+block:
+  confirmations: 5
+
 ---
 #spring profiles : LOCAL
 

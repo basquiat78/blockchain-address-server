@@ -1,6 +1,7 @@
 package com.basquiat.address.service.transaction.vo;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -45,8 +46,8 @@ public class TransactionVO {
 	private Integer confirmations;
 	
 	/**
-	 * 해당 트랜잭션 정보를 업데이트한 시각
+	 * 해당 트랜잭션 정보를 생성한 시각
 	 */
-	private String updateDttm;
+	private Timestamp createDttm;
 	
 }

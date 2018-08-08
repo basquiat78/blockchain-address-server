@@ -18,8 +18,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import com.basquiat.address.code.UnitCode;
 import com.basquiat.address.node.BlockChainNodeInterface;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -139,6 +141,22 @@ public class CommonUtil {
 	}
 	
 	/**
+	 * 트랜잭션으로부터 address를 추출한다.
+	 * @param jsonObject
+	 * @return String
+	 * @throws Exception
+	 */
+	public static String getAddressFromTxId(JsonObject jsonObject) throws Exception {
+	    String address = null;
+	    try {
+	    	address = jsonObject.get("to").getAsString();
+	    } catch (Exception e) {
+	    	address = null;
+	    }
+	    return address;
+	}
+	
+	/**
 	 * 개별적인 vout의 정보로부터 value를 가져온다.
 	 * @param jsonObject
 	 * @return
@@ -157,6 +175,27 @@ public class CommonUtil {
 	public static String convertUnixTimeToString(Integer blockTime) throws Exception {
 		long unixTime = Long.parseLong(blockTime.toString()) * 1000;
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(unixTime));
+	}
+	
+	/**
+	 * ETH는 jsonObject에서 value를 가져온다. 
+	 * @param jsonObject
+	 * @return BigDecimal
+	 * @throws Exception
+	 */
+	public static BigDecimal getValueFromJsonObjectETH(JsonObject jsonObject) throws Exception {
+		BigInteger decodedValue = CommonUtil.decodeQuantityTypeOfETH(jsonObject.get("value").getAsString());
+		return new BigDecimal(decodedValue);
+	}
+
+	/**
+	 * ETH convert wei to ether
+	 * @param number
+	 * @param unit
+	 * @return BigDecimal
+	 */
+	public static BigDecimal convertWeiToEther(BigDecimal number, UnitCode ETHER) {
+		return number.divide(ETHER.getWeiFactor());
 	}
 	
 	/**
@@ -189,15 +228,23 @@ public class CommonUtil {
 	}
 	
 	/**
+	 * eth계열의 경우 getblock값을 받기위해, demical타입의 숫자를 16진수 hex값으로 BigInteger로 변환해야한다.
+	 * @param 
+	 * @return
+	 */
+	public static String decodeHexTypeOfETH(int quantity) {
+		return Integer.toHexString(quantity);
+	}
+	
+	/**
 	 * reflect create instance
 	 * @param preFix
 	 * @param coinCode
 	 * @return BlockChainNodeInterface
 	 * @throws Exception
 	 */
-	public static BlockChainNodeInterface createInstance(String preFix, String coinCode) throws Exception {
-		Class<?> clazz =  Class.forName(preFix + coinCode);
-		BlockChainNodeInterface object = (BlockChainNodeInterface) clazz.newInstance();
+	public static BlockChainNodeInterface createInstance(String serviceId, ApplicationContext context) throws Exception {
+		BlockChainNodeInterface object = (BlockChainNodeInterface) context.getBean(serviceId);
 		return object;
 	}
 
@@ -275,10 +322,10 @@ public class CommonUtil {
 		HttpPost request = new HttpPost(CommonUtil.makeUrlTypeOfEth(host, port));
 		
         JSONObject json = new JSONObject();
-        json.put("method", rpcCommand);
+        json.put("method", rpcCommand);	
         json.put("params", new JSONArray(param));
         json.put("id", "1");
-        request.addHeader("content-type", "application/json");
+        request.addHeader("content-type", "application/json");	
         request.setEntity( new StringEntity( json.toString() ) );
 		
         HttpResponse response = client.execute( request );
@@ -294,5 +341,5 @@ public class CommonUtil {
         }
 
 	}
-	
+
 }

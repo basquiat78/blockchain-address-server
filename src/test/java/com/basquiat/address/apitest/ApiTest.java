@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.basquiat.address.code.RPCCommandCode;
 import com.basquiat.address.service.block.BlockHistoryService;
 import com.basquiat.address.service.block.vo.BlockHistoryVO;
+import com.basquiat.address.service.transaction.mapper.TransactionHistoryMapper;
 import com.basquiat.address.service.wallet.WalletService;
 import com.basquiat.address.service.wallet.vo.WalletVO;
 import com.basquiat.address.util.CommonUtil;
@@ -26,21 +28,26 @@ public class ApiTest {
 	@Autowired
 	private WalletService walletService;
 	
+	@Autowired
+	private TransactionHistoryMapper transactionHistoryMapper;
+	
 	private String coinType;
 	
 	private BlockHistoryVO blockHistoryVO;
 	
 	@Before
     public void setUp() {
+		
 		coinType = "BTC";
+		
 		blockHistoryVO = new BlockHistoryVO();
 		blockHistoryVO.setCoinType(coinType);
 		blockHistoryVO.setLastBlockNumber(BigInteger.valueOf(1353056));
     }
 	
-	@Test
+	//@Test
 	public void getTagSequenceTest() throws Exception {
-		System.out.println(walletService.getTagSequence());
+		System.out.println(RPCCommandCode.BTC_GETINFO.CODE);
 	}
 	
 	//@Test
@@ -68,6 +75,17 @@ public class ApiTest {
 		walletVO.setBalance(total);
 		walletService.updateWalletByAddress(walletVO);
 		System.out.println(CommonUtil.convertJsonStringFromObject(walletService.getWalletByAddress("n4ZEsTqSe1ad155kb3JYEnuFsz6Eyp7Dzk")));
+	}
+	
+	//@Test
+	public void unixTimeToStringTest() throws Exception {
+		Integer blockTime = 1531905016;
+	    System.out.println(CommonUtil.convertUnixTimeToString(blockTime));
+	}
+	
+	@Test
+	public void dbTimestampTest() throws Exception {
+	    System.out.println(CommonUtil.convertJsonStringFromObject(transactionHistoryMapper.selectTransactionHistoryById("d5ba967649248a6c91aa62075a54b9084b8daf2b3f4f20968998c7988ddf05fb")));
 	}
 	
 }

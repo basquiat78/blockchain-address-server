@@ -9,8 +9,6 @@ import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 
 import com.basquiat.address.service.wallet.WalletService;
-import com.basquiat.address.service.wallet.vo.WalletVO;
-import com.basquiat.address.util.CommonUtil;
 
 /**
  * Redis Subscriber Service
@@ -40,12 +38,7 @@ public class RedisMessageSubscriber implements MessageListener {
         if(subChannel.equals(patternString)) {
         	LOG.info("Request Channel is " + patternString);
         	LOG.info("Request Info : " + new String(message.getBody()));
-        	try {
-				walletService.createWallet(CommonUtil.convertObjectFromJsonString(message.toString(), WalletVO.class));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			walletService.createWallet();
         }
     }
 }

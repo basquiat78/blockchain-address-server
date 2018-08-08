@@ -1,6 +1,7 @@
 package com.basquiat.address.service.wallet.vo;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -44,6 +45,11 @@ public class WalletVO {
 	/**
 	 * 생성 날짜
 	 */
-	private String createdDttm;
+	private Timestamp updateDttm;
+	
+	/**
+	 * retry 횟수
+	 */
+	private int retry;
 	
 }

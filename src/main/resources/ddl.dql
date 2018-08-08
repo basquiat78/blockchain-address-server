@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `WALLET` (
   	`ADDRESS` varchar(255) NULL COMMENT 'Coin type에 해당하는 코인 주소',
   	`DESTINATION_TAG` varchar(255) NULL COMMENT 'XRP의 destination_tag를 위한 컬럼',
   	`BALANCE` decimal(65,0) NULL COMMENT '해당 지갑 주소의 코인 발란스',
-  	`CREATEDTTM` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '주소 생성 시각',
+  	`UPDATEDTTM` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '주소 생성 시각',
   	UNIQUE KEY `WALLET_IDX` (`USER_ID`, `ADDRESS`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -40,5 +40,5 @@ CREATE TABLE IF NOT EXISTS `TRANSACTION_HISTORY` (
 	`ADDRESS` varchar(255) NOT NULL COMMENT '지갑주소',
 	`BALANCE` decimal(65,0) DEFAULT 0 NOT NULL COMMENT '발란스',
 	`CONFIRMATIONS` int(10) NOT NULL COMMENT 'confirmations',
-	`UPDATE_TIME` timestamp NOT NULL  COMMENT '업데이트된 시각'
+	`CREATEDTTM` timestamp NOT NULL  COMMENT '업데이트된 시각'
    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

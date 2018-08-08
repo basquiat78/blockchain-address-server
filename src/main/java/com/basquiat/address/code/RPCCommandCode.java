@@ -45,11 +45,15 @@ public enum RPCCommandCode {
 	/**
 	 * ETC Command
 	 */
-	ETC_GETINFO("eth_getBlockByNumber"),
+	ETC_GETINFO("eth_syncing"),
 	
-	//ETC__GETBLOCKCOUNT("eth_blockNumber"),
+	ETC_GETBLOCKCOUNT("eth_blockNumber"),
 	
 	ETC_CREATEADDRESS("personal_newAccount"),
+	
+	ETC_GETBLOCK("eth_getBlockByNumber"),
+	
+	ETC_GETRAWTRANSACTION("eth_getTransactionByHash"),
 	
 	/**
 	 * ETH Command
@@ -58,7 +62,14 @@ public enum RPCCommandCode {
 	
 	ETH_CREATEADDRESS("personal_newAccount"),
 	
-	ETH__GETBLOCKCOUNT("eth_blockNumber");
+	ETH_GETBLOCKCOUNT("eth_blockNumber"),
+	
+	ETH_GETBLOCK("eth_getBlockByNumber"),
+	
+	ETH_GETRAWTRANSACTION("eth_getTransactionByHash"),
+	
+	ETH_GETTRANSACTIONRECEIPT("eth_getTransactionReceipt");
+	
 
 	/** int type constructor */
 	RPCCommandCode(String code, int Id) {

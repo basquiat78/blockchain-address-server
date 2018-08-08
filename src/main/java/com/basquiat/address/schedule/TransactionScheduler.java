@@ -1,4 +1,4 @@
-package com.basquiat.address.scheule;
+package com.basquiat.address.schedule;
 
 import java.util.HashMap;
 import java.util.Map;

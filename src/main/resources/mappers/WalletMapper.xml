@@ -3,63 +3,61 @@
 <mapper namespace="com.basquiat.address.service.wallet.mapper.WalletMapper">
 	
     <resultMap id="walletMap" type="com.basquiat.address.service.wallet.vo.WalletVO">
-        <result property="userId" 			column="userId" />
-        <result property="coinType" 		column="coin_type" />
+        <result property="userId" 			column="user_id" />
+        <result property="coinType"			column="coin_type" />
         <result property="address" 			column="address" />
         <result property="balance" 			column="balance" />
         <result property="destinationTag"	column="destinationTag" />
-        <result property="createdDttm" 		column="createdDttm" />
+        <result property="updateDttm" 		column="updatedttm" />
     </resultMap>
-
-	<insert id="createNextSequence">
-		INSERT INTO SEQUENCE_GENERATOR VALUES (0)
-	</insert>
 
 	<select id="selectWallet" parameterType="com.basquiat.address.service.wallet.vo.WalletVO" resultMap="walletMap">
 		SELECT
-			user_id 		AS userId,
-			coin_type 		AS coinType,
-			address 		AS address,
-			destination_tag	AS destinationTag,
-			DATE_FORMAT(createdttm, 'yyyy-mm-dd"t"hh24:mi:ss"z"') AS createdDttm
-		FROM WALLET
+			user_id
+			, coin_type
+			, address
+			, balance
+			, destinationTag
+			, updatedttm
+		FROM WALLET 
 		WHERE
 			user_id = #{userId} AND coin_type = #{coinType}
 	</select>
 	
 	<select id="selectWalletByAddress" parameterType="string" resultMap="walletMap">
 		SELECT
-			user_id 		AS userId,
-			coin_type 		AS coinType,
-			address 		AS address,
-			balance 		AS balance,
-			destination_tag	AS destinationTag,
-			DATE_FORMAT(createdttm, 'yyyy-mm-dd"t"hh24:mi:ss"z"') AS createdDttm
-		FROM WALLET
+			user_id
+			, coin_type
+			, address
+			, balance
+			, destinationTag
+			, updatedttm
+		FROM WALLET 
 		WHERE
-			address = #{address}
+			UPPER(address) = UPPER(#{address})
 	</select>
 	
 	<select id="selectTagSequence" resultType="java.lang.Integer">
-		SELECT LAST_INSERT_ID()
+		SELECT tag_seq.nextval FROM DUAL
 	</select>
 	
  	<update id="initializeWallet" parameterType="com.basquiat.address.service.wallet.vo.WalletVO">
-		INSERT INTO WALLET
+ 	
+ 		INSERT INTO WALLET
 			( 
-	 		user_id, 
-	 		coin_type, 
-	 		address, 
-	 		destination_tag, 
-	 		createdttm 
+	 		 user_id, 
+	 		 coin_type, 
+	 		 address, 
+	 		 destinationTag, 
+	 		 updatedttm 
 	 		)
         VALUES 	
         	( 
-        	#{userId}, 
-        	#{coinType}, 
-        	#{address}, 
-        	#{destinationTag}, 
-        	now() 
+        	 #{userId}, 
+        	 #{coinType}, 
+        	 #{address}, 
+        	 #{destinationTag}, 
+        	 now() 
         	)
         ON DUPLICATE KEY UPDATE
         	user_id = #{userId}, 

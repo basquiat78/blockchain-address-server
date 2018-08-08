@@ -3,6 +3,7 @@ package com.basquiat.address.redis.queue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,13 @@ public class RedisMessagePublisher implements MessagePublisher {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
-    private ChannelTopic topic;
+    @Qualifier("pub")
+    private ChannelTopic pubTopic;
 
+    @Autowired
+    @Qualifier("retry")
+    private ChannelTopic retryTopic;
+    
     /**
      * Constructor
      */
@@ -34,9 +40,10 @@ public class RedisMessagePublisher implements MessagePublisher {
      * @param redisTemplate
      * @param topic
      */
-    public RedisMessagePublisher(final RedisTemplate<String, Object> redisTemplate, final ChannelTopic topic) {
+    public RedisMessagePublisher(final RedisTemplate<String, Object> redisTemplate, final ChannelTopic pubTopic, final ChannelTopic retryTopic) {
         this.redisTemplate = redisTemplate;
-        this.topic = topic;
+        this.pubTopic = pubTopic;
+        this.retryTopic = retryTopic;
     }
 
     /**
@@ -44,7 +51,15 @@ public class RedisMessagePublisher implements MessagePublisher {
      */
     public void publish(final String message) {
     	LOG.info(message);
-        redisTemplate.convertAndSend(topic.getTopic(), message);
+        redisTemplate.convertAndSend(pubTopic.getTopic(), message);
+    }
+    
+    /**
+     * redis retry pub message
+     */
+    public void retry(final String message) {
+    	LOG.info(message);
+        redisTemplate.convertAndSend(retryTopic.getTopic(), message);
     }
     
 }

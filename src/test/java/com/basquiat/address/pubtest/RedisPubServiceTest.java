@@ -16,16 +16,24 @@ public class RedisPubServiceTest {
 	@Autowired
 	private PublisherService publisherService;
 	
-	private String message;
+	private String pubMessage;
+	
+	private String retryMessage;
 	
 	@Before
     public void setUp() {
-		message = "{'userId':10, 'coinType': 'BTC'}"; 
+		pubMessage = "redisPublisherTest";
+		retryMessage = "redisRetryTest";
     }
 	
-	@Test
+	//@Test
 	public void redisPublisherTest() throws Exception {
-		publisherService.redisPublisher(message);
+		publisherService.redisPublisher(pubMessage);
+	}
+	
+	@Test
+	public void redisRetryTest() throws Exception {
+		publisherService.redisRetryPublisher(retryMessage);
 	}
 	
 }

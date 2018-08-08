@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.basquiat.address.service.transaction.mapper.TransactionHistoryMapper;
 import com.basquiat.address.service.transaction.vo.TransactionVO;
@@ -30,6 +31,7 @@ public class TransactionHistoryService {
 	 * @param transactionVO
 	 * @throws Exception
 	 */
+	@Transactional
 	public void createTransactionHistory(TransactionVO transactionVO) throws Exception {
 		transactionHistoryMapper.insertTransactionHistory(transactionVO);
 	}
@@ -39,6 +41,7 @@ public class TransactionHistoryService {
 	 * @param transactionVO
 	 * @throws Exception
 	 */
+	@Transactional
 	public void updateTransactionHistory(TransactionVO transactionVO) throws Exception {
 		transactionHistoryMapper.updateTransactionHistory(transactionVO);
 	}

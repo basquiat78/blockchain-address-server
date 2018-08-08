@@ -20,17 +20,11 @@ public interface WalletMapper {
 	public void initializeWallet(WalletVO walletVO);
 
 	/**
-	 * sequence_generator table의 sequence 증가
-	 */
-	public void createNextSequence();
-
-	/**
 	 * 해당 주소의 발란스를 업데이트 한다.
 	 * @param walletVO
 	 */
 	public void updateWalletByAddress(WalletVO walletVO);
 	
-
 	/**
 	 * select Wallet Info
 	 * @param walletVO
@@ -44,7 +38,6 @@ public interface WalletMapper {
 	 * @return WalletVO
 	 */
 	public WalletVO selectWalletByAddress(String address);
-
 	
 	/**
 	 * select sequence for ripple destination tag

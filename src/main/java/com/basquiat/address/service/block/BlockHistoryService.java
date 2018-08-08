@@ -2,6 +2,7 @@ package com.basquiat.address.service.block;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.basquiat.address.service.block.mapper.BlockHistoryMapper;
 import com.basquiat.address.service.block.vo.BlockHistoryVO;
@@ -33,6 +34,7 @@ public class BlockHistoryService {
 	 * 마지막으로 확인한 블럭 넘버를 업데이트한다.
 	 * @param blockHistoryVO
 	 */
+	@Transactional
 	public void updateBlockHistory(BlockHistoryVO blockHistoryVO) throws Exception {
 		blockHistoryMapper.updateBlockHistory(blockHistoryVO);
 	}

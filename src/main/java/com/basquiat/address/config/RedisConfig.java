@@ -32,6 +32,9 @@ public class RedisConfig {
 	@Value("${publish.channel}")
 	private String pubChannel;
 	
+	@Value("${retry.channel}")
+	private String retryChannel;
+	
 	@Value("${subscribe.channel}")
 	private String subChannel;
 	
@@ -82,7 +85,7 @@ public class RedisConfig {
         final RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
         // subscribe 채널 등록
-        container.addMessageListener(messageListener(), topics());
+        container.addMessageListener(messageListener(), subTopics());
         return container;
     }
 
@@ -91,7 +94,7 @@ public class RedisConfig {
      * @return ChannelTopic
      */
     @Bean
-    public List<ChannelTopic> topics() {
+    public List<ChannelTopic> subTopics() {
     	List<ChannelTopic> list = new ArrayList<>();
     	list.add(new ChannelTopic(subChannel));
         return list;
@@ -101,9 +104,18 @@ public class RedisConfig {
      * publish 채널 등록
      * @return ChannelTopic
      */
-    @Bean
-    public ChannelTopic topic() {
+    @Bean(name="pub")
+    public ChannelTopic pubTopic() {
     	return new ChannelTopic(pubChannel);
+    }
+    
+    /**
+     * retry 채널 등록
+     * @return ChannelTopic
+     */
+    @Bean(name="retry")
+    public ChannelTopic retryTopic() {
+    	return new ChannelTopic(retryChannel);
     }
     
     /**
@@ -112,7 +124,7 @@ public class RedisConfig {
      */   
     @Bean
     public MessagePublisher redisPublisher() {
-        return new RedisMessagePublisher(redisTemplate(), topic());
+        return new RedisMessagePublisher(redisTemplate(), pubTopic(), retryTopic());
     }
 
     /**
